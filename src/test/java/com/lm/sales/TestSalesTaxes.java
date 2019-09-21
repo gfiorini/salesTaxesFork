@@ -6,14 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 public class TestSalesTaxes {
 
-    /**
-     * Dummy Test
-     */
-    @Test
-    public void shouldAnswerWithTrue()
-    {
-        assertTrue( true );
-    }
+
 
 
 }

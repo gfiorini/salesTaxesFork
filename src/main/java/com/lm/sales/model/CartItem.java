@@ -10,6 +10,9 @@ public class CartItem {
 
     private boolean flgImported;
 
+    public CartItem() {
+    }
+
     public CartItem(Item instance, Amount price, boolean flgImported) {
         this(instance, price, flgImported, 1);
     }
