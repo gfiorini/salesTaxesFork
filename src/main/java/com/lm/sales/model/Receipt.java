@@ -9,7 +9,7 @@ public class Receipt {
 
     private Amount rawTotal = new Amount(BigDecimal.ZERO);
 
-    private Amount saleTaxes = new Amount(BigDecimal.ZERO);
+    private Amount salesTaxes = new Amount(BigDecimal.ZERO);
 
     private Amount total = new Amount(BigDecimal.ZERO);
 
@@ -27,9 +27,15 @@ public class Receipt {
 
     public void calculateTotals(){
         for (ReceiptItem r: items){
-            rawTotal.add(r.getTaxes());
+
+            Amount itemTotalPrice = r.getCartItem().getPrice().multiply(r.getCartItem().getQuantity());
+            rawTotal.add(itemTotalPrice);
+
+            Amount itemTotalTaxes = r.getTaxes().multiply(r.getCartItem().getQuantity());
+            salesTaxes.add(itemTotalTaxes);
+
+            total.add(itemTotalPrice).add(itemTotalTaxes);
         }
     }
-
 
 }

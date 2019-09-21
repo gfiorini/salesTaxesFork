@@ -16,7 +16,7 @@ public class SalesTaxesController {
 
     @RequestMapping("/calculate")
     public Receipt calculate(@RequestBody(required = true) Cart cart, @RequestParam(value = "country", required = false, defaultValue = "IT") String countryCode) {
-        return new Receipt();
+        throw new UnsupportedOperationException();
     }
 
     public static void main(String[] args) {

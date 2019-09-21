@@ -7,14 +7,18 @@ public class Cart {
 
     private Map<String, CartItem> items = new HashMap<String, CartItem>();
 
-    public void addItem(Item item){
-        addItems(item, 1);
+    public void addItem(Item item, Amount price){
+        addItems(item, price, false, 1);
     }
 
-    public void addItems(Item item, long quantity){
+    public void addItem(Item item, Amount price, boolean flgImported){
+        addItems(item, price, flgImported, 1);
+    }
+
+    public void addItems(Item item, Amount price, boolean flgImported, long quantity){
         CartItem cartItem = items.get(item.getProductCode());
         if (cartItem == null){
-            items.put(item.getProductCode(), new CartItem(item, quantity));
+            items.put(item.getProductCode(), new CartItem(item, price, flgImported, quantity));
         } else {
             cartItem.add(quantity);
         }
@@ -27,4 +31,5 @@ public class Cart {
     public void setItems(Map<String, CartItem> items) {
         this.items = items;
     }
+
 }

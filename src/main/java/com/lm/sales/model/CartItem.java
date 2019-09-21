@@ -4,24 +4,21 @@ public class CartItem {
 
     private Item instance;
 
-    private Amount amount;
+    private Amount price;
 
     private long quantity = 0;
 
     private boolean flgImported;
 
-    public CartItem(Item instance) {
-        this(instance, 1);
+    public CartItem(Item instance, Amount price, boolean flgImported) {
+        this(instance, price, flgImported, 1);
     }
 
-    public CartItem(Item instance, long quantity) {
-        this(instance, quantity, false);
-    }
-
-    public CartItem(Item instance, long quantity, boolean flgImported) {
+    public CartItem(Item instance, Amount price, boolean flgImported, long quantity) {
         this.instance = instance;
+        this.price = price;
+        this.flgImported = flgImported;
         this.quantity = quantity;
-        this.flgImported = true;
     }
 
     public void add(long quantity){
@@ -42,5 +39,21 @@ public class CartItem {
 
     public void setInstance(Item instance) {
         this.instance = instance;
+    }
+
+    public Amount getPrice() {
+        return price;
+    }
+
+    public void setPrice(Amount price) {
+        this.price = price;
+    }
+
+    public boolean isFlgImported() {
+        return flgImported;
+    }
+
+    public void setFlgImported(boolean flgImported) {
+        this.flgImported = flgImported;
     }
 }
