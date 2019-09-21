@@ -1,11 +1,18 @@
 package com.lm.sales.model;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.lm.sales.util.KeyGenerator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import java.util.*;
+
+@Component
 public class Cart {
 
-    private Map<String, CartItem> items = new HashMap<String, CartItem>();
+    @Autowired
+    private KeyGenerator keyGenerator;
+
+    private Map<String, CartItem> items = new LinkedHashMap<String, CartItem>();
 
     public void addItem(Item item, Amount price){
         addItems(item, price, false, 1);
@@ -16,13 +23,31 @@ public class Cart {
     }
 
     public void addItems(Item item, Amount price, boolean flgImported, long quantity){
-        CartItem cartItem = items.get(item.getProductCode());
+
+        String key = keyGenerator.buildKey(item, flgImported);
+
+        CartItem cartItem = items.get(key);
         if (cartItem == null){
-            items.put(item.getProductCode(), new CartItem(item, price, flgImported, quantity));
+            items.put(key, new CartItem(item, price, flgImported, quantity));
         } else {
             cartItem.add(quantity);
         }
     }
+
+    public List<String> toList(){
+        List l = new ArrayList();
+        for (CartItem c: items.values()){
+            l.add(buildString(c));
+        }
+        return l;
+    }
+
+    private String buildString(CartItem c) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(c.getQuantity()).append(" ").append(c.getInstance().getDescription()).append(" at ").append((c.getPrice().getValue()));
+        return sb.toString();
+    }
+
 
     public Map<String, CartItem> getItems() {
         return items;
@@ -32,4 +57,11 @@ public class Cart {
         this.items = items;
     }
 
+    public KeyGenerator getKeyGenerator() {
+        return keyGenerator;
+    }
+
+    public void setKeyGenerator(KeyGenerator keyGenerator) {
+        this.keyGenerator = keyGenerator;
+    }
 }

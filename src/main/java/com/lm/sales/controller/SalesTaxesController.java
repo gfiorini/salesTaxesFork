@@ -33,8 +33,6 @@ public class SalesTaxesController {
         return receipt;
     }
 
-
-
     public static void main(String[] args) {
         SpringApplication.run(SalesTaxesController.class, args);
     }

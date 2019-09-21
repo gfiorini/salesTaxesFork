@@ -1,0 +1,20 @@
+{
+  "items":{
+    "XY123":{
+      "instance":{
+        "id":1,
+        "productCode":"XY123",
+        "description":"test product",
+        "category":{
+          "code":"TST"
+        }
+      },
+      "price":{
+        "value":1000,
+        "isoCurrencyCode":"EUR"
+      },
+      "quantity":1,
+      "flgImported":false
+    }
+  }
+}

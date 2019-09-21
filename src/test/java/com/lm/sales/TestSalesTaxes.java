@@ -1,12 +1,142 @@
 package com.lm.sales;
 
+import com.lm.sales.model.*;
+import com.lm.sales.util.DefaultKeyGenerator;
+import org.junit.Assert;
 import org.junit.Test;
+
+import java.io.*;
+import java.math.BigDecimal;
+import java.util.Iterator;
+import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 
 public class TestSalesTaxes {
 
+    @Test
+    public void testInput1() throws IOException {
 
+        /*
+            1 book at 12.49
+            1 music CD at 14.99
+            1 chocolate bar at 0.85
+         */
+
+        BufferedReader br = getBufferedReader("input/input_1.txt");
+        Cart cart = getCart1();
+
+        List<String> stringItems = cart.toList();
+        Iterator<String> stringIterator = stringItems.iterator();
+
+        Assert.assertEquals(3, stringItems.size());
+        checkInputs(br, stringIterator);
+    }
+
+    @Test
+    public void testInput2() throws IOException {
+
+        /*
+            1 imported box of chocolates at 10.00
+            1 imported bottle of perfume at 47.50
+         */
+
+        BufferedReader br = getBufferedReader("input/input_2.txt");
+        Cart cart = getCart2();
+
+        List<String> stringItems = cart.toList();
+        Iterator<String> stringIterator = stringItems.iterator();
+
+        Assert.assertEquals(2, stringItems.size());
+        checkInputs(br, stringIterator);
+    }
+
+    @Test
+    public void testInput3() throws IOException {
+
+        /*
+            1 imported bottle of perfume at 27.99
+            1 bottle of perfume at 18.99
+            1 packet of headache pills at 9.75
+            1 box of imported chocolates at 11.25
+         */
+
+        BufferedReader br = getBufferedReader("input/input_3.txt");
+
+        Cart cart = getCart3();
+
+        List<String> stringItems = cart.toList();
+        Iterator<String> stringIterator = stringItems.iterator();
+
+        Assert.assertEquals(4, stringItems.size());
+        checkInputs(br, stringIterator);
+    }
+
+    private BufferedReader getBufferedReader(String resourceName) throws FileNotFoundException {
+        ClassLoader classLoader = getClass().getClassLoader();
+        File file = new File(classLoader.getResource(resourceName).getFile());
+        return new BufferedReader(new FileReader(file));
+    }
+
+    private void checkInputs(BufferedReader br, Iterator<String> stringIterator) throws IOException {
+        String st;
+        while (stringIterator.hasNext()) {
+            st = br.readLine();
+            Assert.assertNotNull(st);
+            String item = stringIterator.next();
+            Assert.assertNotNull(item);
+            Assert.assertEquals(item, st);
+            System.out.println(st);
+        }
+    }
+
+    private Cart getCart1() {
+        Cart cart = new Cart();
+        cart.setKeyGenerator(new DefaultKeyGenerator());
+
+        Item book = new Item(1l, "BOO01", "book", new Category("BOOK"));
+        cart.addItem(book, new Amount(new BigDecimal("12.49")), false);
+
+        Item cd = new Item(2l, "CD01", "music CD", new Category("MUSIC"));
+        cart.addItem(cd, new Amount(new BigDecimal("14.99")), false);
+
+        Item chocolate = new Item(3l, "CH01", "chocolate bar", new Category("FOOD"));
+        cart.addItem(chocolate, new Amount(new BigDecimal("0.85")), false);
+
+        return cart;
+    }
+
+    private Cart getCart2() {
+        Cart cart = new Cart();
+        cart.setKeyGenerator(new DefaultKeyGenerator());
+
+        Item book = new Item(1l, "CH001", "imported box of chocolates", new Category("FOOD"));
+        cart.addItem(book, new Amount(new BigDecimal("10.00")), true);
+
+        Item cd = new Item(2l, "PRF01", "imported bottle of perfume", new Category("COSMETICS"));
+        cart.addItem(cd, new Amount(new BigDecimal("47.50")), true);
+
+        return cart;
+    }
+
+
+    private Cart getCart3() {
+        Cart cart = new Cart();
+        cart.setKeyGenerator(new DefaultKeyGenerator());
+
+        Item importedPerfume = new Item(1l, "PRF01", "imported bottle of perfume", new Category("COSMETICS"));
+        cart.addItem(importedPerfume, new Amount(new BigDecimal("27.99")), true);
+
+        Item perfume = new Item(2l, "PRF02", "bottle of perfume", new Category("COSMETICS"));
+        cart.addItem(perfume, new Amount(new BigDecimal("18.99")), false);
+
+        Item pills = new Item(3l, "PIL01", "packet of headache pills", new Category("MEDICAL"));
+        cart.addItem(pills, new Amount(new BigDecimal("9.75")), false);
+
+        Item importedChocolate = new Item(4l, "CHO01", "box of imported chocolates", new Category("FOOD"));
+        cart.addItem(importedChocolate, new Amount(new BigDecimal("11.25")), true);
+        return cart;
+    }
 
 
 }
