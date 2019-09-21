@@ -1,26 +1,26 @@
 package com.lm.sales.factory;
 
-import com.lm.sales.manager.ReceiptManager;
+import com.lm.sales.manager.IReceiptManager;
 import com.lm.sales.manager.ReceiptManagerDummy;
 import com.lm.sales.manager.ReceiptManagerITA;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
 import java.util.Map;
 
-@Component("defaultReceiptManagerFactory")
-public class DefaultReceiptManagerFactory implements ReceiptManagerFactory {
+@Component
+public class DefaultReceiptManagerFactory implements IReceiptManagerFactory {
 
+    @Autowired
+    private Map<String, IReceiptManager> map;
 
-    /* simple factory to handle different taxes for different countries, for simplicity will be implemented only "IT" taxation (default)  */
     @Override
-    public ReceiptManager build(String countryCode) {
-        if ("IT".equalsIgnoreCase(countryCode)){
-            return new ReceiptManagerITA();
-        } else if ("dummy".equalsIgnoreCase(countryCode)){
-            return new ReceiptManagerDummy();
+    public IReceiptManager build(String countryCode) {
+        IReceiptManager rm = map.get(countryCode);
+        if (rm == null){
+            throw new UnsupportedOperationException("unsupported country: " + countryCode);
         } else {
-            throw new UnsupportedOperationException();
+            return rm;
         }
     }
 

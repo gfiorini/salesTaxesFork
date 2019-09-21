@@ -1,6 +1,5 @@
 package com.lm.sales.model;
 
-import com.lm.sales.util.KeyGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -8,9 +7,6 @@ import java.util.*;
 
 @Component
 public class Cart {
-
-    @Autowired
-    private KeyGenerator keyGenerator;
 
     private Map<String, CartItem> items = new LinkedHashMap<String, CartItem>();
 
@@ -24,7 +20,7 @@ public class Cart {
 
     public void addItems(Item item, Amount price, boolean flgImported, long quantity){
 
-        String key = keyGenerator.buildKey(item, flgImported);
+        String key = buildKey(item, flgImported);
 
         CartItem cartItem = items.get(key);
         if (cartItem == null){
@@ -48,6 +44,9 @@ public class Cart {
         return sb.toString();
     }
 
+    public String buildKey(Item item, boolean flgImported) {
+        return new StringBuilder().append(item.getProductCode()).append("_").append(flgImported).toString();
+    }
 
     public Map<String, CartItem> getItems() {
         return items;
@@ -57,11 +56,8 @@ public class Cart {
         this.items = items;
     }
 
-    public KeyGenerator getKeyGenerator() {
-        return keyGenerator;
-    }
 
-    public void setKeyGenerator(KeyGenerator keyGenerator) {
-        this.keyGenerator = keyGenerator;
-    }
+
+
+
 }

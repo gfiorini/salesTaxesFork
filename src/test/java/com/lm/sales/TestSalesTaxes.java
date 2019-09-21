@@ -1,9 +1,20 @@
 package com.lm.sales;
 
+import com.lm.sales.controller.SalesTaxesController;
+import com.lm.sales.factory.DefaultReceiptManagerFactory;
+import com.lm.sales.factory.IReceiptManagerFactory;
+import com.lm.sales.formatter.DefaultReceiptFormatter;
+import com.lm.sales.formatter.IReceiptFormatter;
+import com.lm.sales.manager.IReceiptManager;
+import com.lm.sales.manager.ITaxManager;
 import com.lm.sales.model.*;
-import com.lm.sales.util.DefaultKeyGenerator;
+
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.*;
 import java.math.BigDecimal;
@@ -12,7 +23,15 @@ import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = {SalesTaxesController.class})
 public class TestSalesTaxes {
+
+    @Autowired
+    private IReceiptManagerFactory receiptManagerFactory;
+
+    @Autowired
+    private IReceiptFormatter receiptFormatter;
 
     @Test
     public void testInput1() throws IOException {
@@ -23,6 +42,8 @@ public class TestSalesTaxes {
             1 chocolate bar at 0.85
          */
 
+        System.out.println("\n ********* TEST INPUT 1 ******** ");
+
         BufferedReader br = getBufferedReader("input/input_1.txt");
         Cart cart = getCart1();
 
@@ -30,7 +51,9 @@ public class TestSalesTaxes {
         Iterator<String> stringIterator = stringItems.iterator();
 
         Assert.assertEquals(3, stringItems.size());
-        checkInputs(br, stringIterator);
+        checkEqualsLines(br, stringIterator);
+
+        System.out.println(" ************************** ");
     }
 
     @Test
@@ -41,6 +64,8 @@ public class TestSalesTaxes {
             1 imported bottle of perfume at 47.50
          */
 
+        System.out.println(" ********* TEST INPUT 2 ******** ");
+
         BufferedReader br = getBufferedReader("input/input_2.txt");
         Cart cart = getCart2();
 
@@ -48,7 +73,9 @@ public class TestSalesTaxes {
         Iterator<String> stringIterator = stringItems.iterator();
 
         Assert.assertEquals(2, stringItems.size());
-        checkInputs(br, stringIterator);
+        checkEqualsLines(br, stringIterator);
+
+        System.out.println(" ************************** ");
     }
 
     @Test
@@ -61,6 +88,8 @@ public class TestSalesTaxes {
             1 box of imported chocolates at 11.25
          */
 
+        System.out.println(" ********* TEST INPUT 3 ******** ");
+
         BufferedReader br = getBufferedReader("input/input_3.txt");
 
         Cart cart = getCart3();
@@ -69,7 +98,63 @@ public class TestSalesTaxes {
         Iterator<String> stringIterator = stringItems.iterator();
 
         Assert.assertEquals(4, stringItems.size());
-        checkInputs(br, stringIterator);
+        checkEqualsLines(br, stringIterator);
+
+        System.out.println(" ************************** ");
+    }
+
+    @Test
+    public void testReceipt1() throws IOException {
+
+        System.out.println(" ********* TEST RECEIPT 1 ******** ");
+
+        Cart cart = getCart1();
+        IReceiptManager receiptManager = receiptManagerFactory.build("IT");
+        Receipt receipt = receiptManager.calculateReceipt(cart);
+        List<String> receiptLines = receiptFormatter.print(receipt);
+        Assert.assertEquals(5, receiptLines);
+
+        BufferedReader br = getBufferedReader("output/output_1.txt");
+        Iterator<String> stringIterator = receiptLines.iterator();
+        checkEqualsLines(br, stringIterator);
+
+        System.out.println(" ************************** ");
+    }
+
+    @Test
+    public void testReceipt2() throws IOException {
+
+        System.out.println(" ********* TEST RECEIPT 2 ******** ");
+
+        Cart cart = getCart2();
+        IReceiptManager receiptManager = receiptManagerFactory.build("IT");
+        Receipt receipt = receiptManager.calculateReceipt(cart);
+        List<String> receiptLines = receiptFormatter.print(receipt);
+        Assert.assertEquals(4, receiptLines);
+
+        BufferedReader br = getBufferedReader("output/output_2.txt");
+        Iterator<String> stringIterator = receiptLines.iterator();
+        checkEqualsLines(br, stringIterator);
+
+        System.out.println(" ************************** ");
+    }
+
+    @Test
+    public void testReceipt3() throws IOException {
+
+        System.out.println(" ********* TEST RECEIPT 3 ******** ");
+
+        Cart cart = getCart3();
+        IReceiptManager receiptManager = new DefaultReceiptManagerFactory().build("IT");
+        Receipt receipt = receiptManager.calculateReceipt(cart);
+        List<String> receiptLines = receiptFormatter.print(receipt);
+        Assert.assertEquals(6, receiptLines);
+
+        BufferedReader br = getBufferedReader("output/output_3.txt");
+        Iterator<String> stringIterator = receiptLines.iterator();
+        checkEqualsLines(br, stringIterator);
+
+        System.out.println(" ************************** ");
     }
 
     private BufferedReader getBufferedReader(String resourceName) throws FileNotFoundException {
@@ -78,7 +163,7 @@ public class TestSalesTaxes {
         return new BufferedReader(new FileReader(file));
     }
 
-    private void checkInputs(BufferedReader br, Iterator<String> stringIterator) throws IOException {
+    private void checkEqualsLines(BufferedReader br, Iterator<String> stringIterator) throws IOException {
         String st;
         while (stringIterator.hasNext()) {
             st = br.readLine();
@@ -92,7 +177,6 @@ public class TestSalesTaxes {
 
     private Cart getCart1() {
         Cart cart = new Cart();
-        cart.setKeyGenerator(new DefaultKeyGenerator());
 
         Item book = new Item(1l, "BOO01", "book", new Category("BOOK"));
         cart.addItem(book, new Amount(new BigDecimal("12.49")), false);
@@ -108,7 +192,6 @@ public class TestSalesTaxes {
 
     private Cart getCart2() {
         Cart cart = new Cart();
-        cart.setKeyGenerator(new DefaultKeyGenerator());
 
         Item book = new Item(1l, "CH001", "imported box of chocolates", new Category("FOOD"));
         cart.addItem(book, new Amount(new BigDecimal("10.00")), true);
@@ -122,7 +205,6 @@ public class TestSalesTaxes {
 
     private Cart getCart3() {
         Cart cart = new Cart();
-        cart.setKeyGenerator(new DefaultKeyGenerator());
 
         Item importedPerfume = new Item(1l, "PRF01", "imported bottle of perfume", new Category("COSMETICS"));
         cart.addItem(importedPerfume, new Amount(new BigDecimal("27.99")), true);

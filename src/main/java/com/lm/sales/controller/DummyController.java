@@ -1,7 +1,7 @@
 package com.lm.sales.controller;
 
-import com.lm.sales.factory.ReceiptManagerFactory;
-import com.lm.sales.manager.ReceiptManager;
+import com.lm.sales.factory.IReceiptManagerFactory;
+import com.lm.sales.manager.IReceiptManager;
 import com.lm.sales.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,12 +15,12 @@ import java.util.Map;
 public class DummyController {
 
     @Autowired
-    private ReceiptManagerFactory receiptManagerFactory;
+    private IReceiptManagerFactory receiptManagerFactory;
 
     @RequestMapping("/receipt")
     public Receipt dummy() {
-        ReceiptManager receiptManager = receiptManagerFactory.build("dummy");
-        Receipt receipt = receiptManager.calculateReceipt(null);
+        IReceiptManager IReceiptManager = receiptManagerFactory.build("dummy");
+        Receipt receipt = IReceiptManager.calculateReceipt(null);
         return receipt;
     }
 

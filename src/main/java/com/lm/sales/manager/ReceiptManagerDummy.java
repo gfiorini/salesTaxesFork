@@ -7,8 +7,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component("receiptManagerDummy")
-public class ReceiptManagerDummy implements ReceiptManager {
+@Component("DUMMY")
+public class ReceiptManagerDummy implements IReceiptManager {
 
     @Override
     public Receipt calculateReceipt(Cart cart) {
