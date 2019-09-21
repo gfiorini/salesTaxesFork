@@ -14,4 +14,9 @@ public class TestSalesTaxes {
     {
         assertTrue( true );
     }
+
+    @Test
+    public void failMe() {
+        assertTrue(false);
+    }
 }
