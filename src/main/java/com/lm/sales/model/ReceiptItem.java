@@ -4,11 +4,11 @@ public class ReceiptItem {
 
     private CartItem cartItem;
 
-    private Amount taxes;
+    private Amount totalTaxes;
 
-    public ReceiptItem(CartItem cartItem, Amount taxes) {
+    public ReceiptItem(CartItem cartItem, Amount totalTaxes) {
         this.cartItem = cartItem;
-        this.taxes = taxes;
+        this.totalTaxes = totalTaxes;
     }
 
     public CartItem getCartItem() {
@@ -19,11 +19,15 @@ public class ReceiptItem {
         this.cartItem = cartItem;
     }
 
-    public Amount getTaxes() {
-        return taxes;
+    public Amount getTotalTaxes() {
+        return totalTaxes;
     }
 
-    public void setTaxes(Amount taxes) {
-        this.taxes = taxes;
+    public void setTotalTaxes(Amount totalTaxes) {
+        this.totalTaxes = totalTaxes;
+    }
+
+    public Amount getTotalPrice(){
+        return cartItem.getTotalNetPrice().add(totalTaxes);
     }
 }

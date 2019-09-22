@@ -7,7 +7,7 @@ public class Receipt {
 
     private List<ReceiptItem> items;
 
-    private Amount rawTotal = new Amount(BigDecimal.ZERO);
+    private Amount netTotal = new Amount(BigDecimal.ZERO);
 
     private Amount salesTaxes = new Amount(BigDecimal.ZERO);
 
@@ -15,6 +15,20 @@ public class Receipt {
 
     public Receipt(List<ReceiptItem> items) {
         this.items = items;
+        calculateTotals();
+    }
+
+    private void calculateTotals(){
+        for (ReceiptItem r: items){
+
+            Amount itemTotalNetPrice = r.getCartItem().getTotalNetPrice();
+            netTotal = netTotal.add(itemTotalNetPrice);
+
+            Amount itemTotalTaxes = r.getTotalTaxes();
+            salesTaxes = salesTaxes.add(itemTotalTaxes);
+
+            total = total.add(itemTotalNetPrice).add(itemTotalTaxes);
+        }
     }
 
     public List<ReceiptItem> getItems() {
@@ -25,17 +39,27 @@ public class Receipt {
         this.items = items;
     }
 
-    public void calculateTotals(){
-        for (ReceiptItem r: items){
-
-            Amount itemTotalPrice = r.getCartItem().getPrice().multiply(r.getCartItem().getQuantity());
-            rawTotal.add(itemTotalPrice);
-
-            Amount itemTotalTaxes = r.getTaxes().multiply(r.getCartItem().getQuantity());
-            salesTaxes.add(itemTotalTaxes);
-
-            total.add(itemTotalPrice).add(itemTotalTaxes);
-        }
+    public Amount getNetTotal() {
+        return netTotal;
     }
 
+    public void setNetTotal(Amount netTotal) {
+        this.netTotal = netTotal;
+    }
+
+    public Amount getSalesTaxes() {
+        return salesTaxes;
+    }
+
+    public void setSalesTaxes(Amount salesTaxes) {
+        this.salesTaxes = salesTaxes;
+    }
+
+    public Amount getTotal() {
+        return total;
+    }
+
+    public void setTotal(Amount total) {
+        this.total = total;
+    }
 }

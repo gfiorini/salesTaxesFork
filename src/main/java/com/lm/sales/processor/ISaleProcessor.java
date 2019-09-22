@@ -1,12 +1,12 @@
-package com.lm.sales.manager;
+package com.lm.sales.processor;
 
 import com.lm.sales.model.Amount;
 import com.lm.sales.model.CartItem;
 import org.springframework.stereotype.Component;
 
 @Component
-public interface ITaxManager {
+public interface ISaleProcessor {
 
-    Amount applyTaxes(CartItem ci);
+    public Amount calculate(CartItem cartItem);
 
 }

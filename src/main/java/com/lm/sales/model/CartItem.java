@@ -24,6 +24,10 @@ public class CartItem {
         this.quantity = quantity;
     }
 
+    public Amount getTotalNetPrice(){
+        return price.multiply(quantity);
+    }
+
     public void add(long quantity){
         this.quantity += quantity;
     }

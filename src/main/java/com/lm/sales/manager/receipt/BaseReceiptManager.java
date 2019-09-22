@@ -1,5 +1,6 @@
-package com.lm.sales.manager;
+package com.lm.sales.manager.receipt;
 
+import com.lm.sales.manager.tax.ITaxManager;
 import com.lm.sales.model.Amount;
 import com.lm.sales.model.CartItem;
 import com.lm.sales.model.ReceiptItem;

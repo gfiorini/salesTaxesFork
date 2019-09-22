@@ -1,6 +1,6 @@
 package com.lm.sales.factory;
 
-import com.lm.sales.manager.IReceiptManager;
+import com.lm.sales.manager.receipt.IReceiptManager;
 import org.springframework.stereotype.Component;
 
 @Component

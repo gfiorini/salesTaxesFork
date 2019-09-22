@@ -1,7 +1,7 @@
 package com.lm.sales.controller;
 
 import com.lm.sales.factory.IReceiptManagerFactory;
-import com.lm.sales.manager.IReceiptManager;
+import com.lm.sales.manager.receipt.IReceiptManager;
 import com.lm.sales.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;

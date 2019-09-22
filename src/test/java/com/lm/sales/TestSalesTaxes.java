@@ -1,12 +1,9 @@
 package com.lm.sales;
 
 import com.lm.sales.controller.SalesTaxesController;
-import com.lm.sales.factory.DefaultReceiptManagerFactory;
 import com.lm.sales.factory.IReceiptManagerFactory;
-import com.lm.sales.formatter.DefaultReceiptFormatter;
 import com.lm.sales.formatter.IReceiptFormatter;
-import com.lm.sales.manager.IReceiptManager;
-import com.lm.sales.manager.ITaxManager;
+import com.lm.sales.manager.receipt.IReceiptManager;
 import com.lm.sales.model.*;
 
 import org.junit.Assert;
@@ -112,7 +109,7 @@ public class TestSalesTaxes {
         IReceiptManager receiptManager = receiptManagerFactory.build("IT");
         Receipt receipt = receiptManager.calculateReceipt(cart);
         List<String> receiptLines = receiptFormatter.print(receipt);
-        Assert.assertEquals(5, receiptLines);
+        Assert.assertEquals(5, receiptLines.size());
 
         BufferedReader br = getBufferedReader("output/output_1.txt");
         Iterator<String> stringIterator = receiptLines.iterator();
@@ -130,7 +127,7 @@ public class TestSalesTaxes {
         IReceiptManager receiptManager = receiptManagerFactory.build("IT");
         Receipt receipt = receiptManager.calculateReceipt(cart);
         List<String> receiptLines = receiptFormatter.print(receipt);
-        Assert.assertEquals(4, receiptLines);
+        Assert.assertEquals(4, receiptLines.size());
 
         BufferedReader br = getBufferedReader("output/output_2.txt");
         Iterator<String> stringIterator = receiptLines.iterator();
@@ -145,10 +142,10 @@ public class TestSalesTaxes {
         System.out.println(" ********* TEST RECEIPT 3 ******** ");
 
         Cart cart = getCart3();
-        IReceiptManager receiptManager = new DefaultReceiptManagerFactory().build("IT");
+        IReceiptManager receiptManager = receiptManagerFactory.build("IT");
         Receipt receipt = receiptManager.calculateReceipt(cart);
         List<String> receiptLines = receiptFormatter.print(receipt);
-        Assert.assertEquals(6, receiptLines);
+        Assert.assertEquals(6, receiptLines.size());
 
         BufferedReader br = getBufferedReader("output/output_3.txt");
         Iterator<String> stringIterator = receiptLines.iterator();
@@ -170,7 +167,7 @@ public class TestSalesTaxes {
             Assert.assertNotNull(st);
             String item = stringIterator.next();
             Assert.assertNotNull(item);
-            Assert.assertEquals(item, st);
+            Assert.assertEquals(st, item);
             System.out.println(st);
         }
     }

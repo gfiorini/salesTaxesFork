@@ -38,7 +38,7 @@ public class Amount {
 
     public Amount add(Amount taxes) {
         if (taxes.getIsoCurrencyCode().equals(isoCurrencyCode)){
-            this.value.add(taxes.getValue());
+            this.value = this.value.add(taxes.getValue());
             return this;
         } else {
             //todo: need to convert currency values (not implemented in this exercise for simplicity)
@@ -48,6 +48,10 @@ public class Amount {
 
     public Amount multiply(long quantity){
         return new Amount(this.value.multiply(BigDecimal.valueOf(quantity)), this.isoCurrencyCode);
+    }
+
+    public Amount multiply(BigDecimal value){
+        return new Amount(this.value.multiply(value), this.isoCurrencyCode);
     }
 
 

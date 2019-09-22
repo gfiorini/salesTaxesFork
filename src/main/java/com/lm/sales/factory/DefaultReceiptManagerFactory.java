@@ -1,8 +1,6 @@
 package com.lm.sales.factory;
 
-import com.lm.sales.manager.IReceiptManager;
-import com.lm.sales.manager.ReceiptManagerDummy;
-import com.lm.sales.manager.ReceiptManagerITA;
+import com.lm.sales.manager.receipt.IReceiptManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
