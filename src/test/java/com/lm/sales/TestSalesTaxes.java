@@ -108,6 +108,31 @@ public class TestSalesTaxes {
     }
 
     @Test
+    public void testInput4() throws IOException {
+
+        /*
+            1 imported bottle of perfume at 27.99
+            2 bottle of perfume at 37.98
+            1 packet of headache pills at 9.75
+            2 imported box of chocolates at 22.50
+         */
+
+        System.out.println(" ********* TEST INPUT 4 ******** ");
+
+        BufferedReader br = getBufferedReader("input/input_4.txt");
+
+        Cart cart = getCart4();
+
+        List<String> stringItems = cart.toList();
+        Iterator<String> stringIterator = stringItems.iterator();
+
+        Assert.assertEquals(4, stringItems.size());
+        checkEqualsLines(br, stringIterator);
+
+        System.out.println(" ************************** ");
+    }
+
+    @Test
     public void testRounding(){
 
         Amount value1 = new Amount(new BigDecimal("4.7321"));
@@ -184,6 +209,26 @@ public class TestSalesTaxes {
         System.out.println(" ************************** ");
     }
 
+    @Test
+    public void testReceipt4() throws IOException {
+
+        System.out.println(" ********* TEST RECEIPT 4 ******** ");
+
+        Cart cart = getCart4();
+        IReceiptManager receiptManager = receiptManagerFactory.build("IT");
+        Receipt receipt = receiptManager.calculateReceipt(cart);
+        List<String> receiptLines = receiptFormatter.print(receipt);
+        Assert.assertEquals(6, receiptLines.size());
+
+        BufferedReader br = getBufferedReader("output/output_4.txt");
+        Iterator<String> stringIterator = receiptLines.iterator();
+        checkEqualsLines(br, stringIterator);
+
+        System.out.println(" ************************** ");
+    }
+
+
+
     private BufferedReader getBufferedReader(String resourceName) throws FileNotFoundException {
         ClassLoader classLoader = getClass().getClassLoader();
         File file = new File(classLoader.getResource(resourceName).getFile());
@@ -247,5 +292,20 @@ public class TestSalesTaxes {
         return cart;
     }
 
+    private Cart getCart4() {
+        Cart cart = new Cart();
 
+        Item importedPerfume = new Item(1l, "PRF01", "imported bottle of perfume", new Category("COSMETICS"));
+        cart.addItem(importedPerfume, new Amount(new BigDecimal("27.99")), true);
+
+        Item perfume = new Item(2l, "PRF02", "bottle of perfume", new Category("COSMETICS"));
+        cart.addItems(perfume, new Amount(new BigDecimal("18.99")), false, 2);
+
+        Item pills = new Item(3l, "PIL01", "packet of headache pills", new Category("MEDICAL"));
+        cart.addItem(pills, new Amount(new BigDecimal("9.75")), false);
+
+        Item importedChocolate = new Item(4l, "CHO01", "imported box of chocolates", new Category("FOOD"));
+        cart.addItems(importedChocolate, new Amount(new BigDecimal("11.25")), true, 2);
+        return cart;
+    }
 }

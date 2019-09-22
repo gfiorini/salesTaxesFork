@@ -15,7 +15,7 @@ public class BasicSaleProcessor extends AbstractSaleProcessor {
 
     @Override
     public Amount calculate(CartItem cartItem) {
-        Amount taxes = cartItem.getTotalNetPrice().multiply(taxRate);
-        return rounder.round(taxes);
+        Amount taxes = cartItem.getPrice().multiply(taxRate);
+        return rounder.round(taxes).multiply(cartItem.getQuantity());
     }
 }

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.*;
 
-@Component
+@Component("taxManagerITA")
 public class TaxManagerITA extends AbstractTaxManager {
 
     public static final Set<String> noTaxesSetBasicSaleCategories =

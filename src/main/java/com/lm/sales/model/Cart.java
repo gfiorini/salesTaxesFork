@@ -40,7 +40,7 @@ public class Cart {
 
     private String buildString(CartItem c) {
         StringBuilder sb = new StringBuilder();
-        sb.append(c.getQuantity()).append(" ").append(c.getInstance().getDescription()).append(" at ").append((c.getPrice().getValue()));
+        sb.append(c.getQuantity()).append(" ").append(c.getInstance().getDescription()).append(" at ").append((c.getPrice().multiply(c.getQuantity()).getValue()));
         return sb.toString();
     }
 
