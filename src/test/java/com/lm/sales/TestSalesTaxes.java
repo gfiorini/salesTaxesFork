@@ -3,9 +3,11 @@ package com.lm.sales;
 import com.lm.sales.controller.SalesTaxesController;
 import com.lm.sales.factory.IReceiptManagerFactory;
 import com.lm.sales.formatter.IReceiptFormatter;
+import com.lm.sales.helper.ITaxRounder;
 import com.lm.sales.manager.receipt.IReceiptManager;
 import com.lm.sales.model.*;
 
+import com.lm.sales.processor.ImportedSaleProcessor;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,6 +32,11 @@ public class TestSalesTaxes {
     @Autowired
     private IReceiptFormatter receiptFormatter;
 
+    @Autowired
+    private ImportedSaleProcessor importedSaleProcessor;
+
+    @Autowired
+    private ITaxRounder rounder;
     @Test
     public void testInput1() throws IOException {
 
@@ -99,6 +106,29 @@ public class TestSalesTaxes {
 
         System.out.println(" ************************** ");
     }
+
+    @Test
+    public void testRounding(){
+
+        Amount value1 = new Amount(new BigDecimal("4.7321"));
+        Amount rounded1 = rounder.round(value1);
+        Assert.assertEquals("4.75", rounded1.getValue().toString());
+
+        Amount value2 = new Amount(new BigDecimal("4.75"));
+        Amount rounded2 = rounder.round(value2);
+        Assert.assertEquals("4.75", rounded2.getValue().toString());
+
+        Amount value3 = new Amount(new BigDecimal("0.5625"));
+        Amount rounded3 = rounder.round(value3);
+        Assert.assertEquals("0.60", rounded3.getValue().toString());
+
+        Amount value4 = new Amount(new BigDecimal("2.375"));
+        Amount rounded4 = rounder.round(value4);
+        Assert.assertEquals("2.40", rounded4.getValue().toString());
+
+    }
+
+
 
     @Test
     public void testReceipt1() throws IOException {
@@ -212,7 +242,7 @@ public class TestSalesTaxes {
         Item pills = new Item(3l, "PIL01", "packet of headache pills", new Category("MEDICAL"));
         cart.addItem(pills, new Amount(new BigDecimal("9.75")), false);
 
-        Item importedChocolate = new Item(4l, "CHO01", "box of imported chocolates", new Category("FOOD"));
+        Item importedChocolate = new Item(4l, "CHO01", "imported box of chocolates", new Category("FOOD"));
         cart.addItem(importedChocolate, new Amount(new BigDecimal("11.25")), true);
         return cart;
     }
